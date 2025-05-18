@@ -1,0 +1,27 @@
+<div class="flex justify-center gap-5 flex-col" id="authenticate-form">
+	<h2 class="text-xl font-bold my-5 underline">Authentication</h2>
+	<form
+		hx-post="/auth"
+		hx-swap="outerHTML"
+		hx-target="#authenticate-form"
+		class="flex flex-col gap-5 items-center my-5"
+	>
+		<input
+			class="input-field"
+			type="text"
+			name="username"
+			placeholder="Username"
+			value="{{ username }}"
+			required
+		/>
+		<input
+			class="input-field"
+			type="password"
+			name="password"
+			placeholder="Password"
+			required
+		/>
+		<button type="submit" class="button-style">Send</button>
+	</form>
+	<p class="text-red-500 text-lg font-bold my-5">{{ error }}</p>
+</div>

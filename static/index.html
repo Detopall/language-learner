@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			src="https://unpkg.com/htmx.org@2.0.4"
+			integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<script defer src="/static/assets/script.js"></script>
+		<style type="text/tailwindcss">
+			.input-field {
+				@apply px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200 border-solid border-2 border-gray-400;
+			}
+			.button-style {
+				@apply px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200 border-solid border-2 border-gray-400 rounded cursor-pointer;
+			}
+			.menu-list {
+				@apply flex justify-center gap-5 mt-5;
+			}
+			.menu-link {
+				@apply px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200;
+			}
+		</style>
+		<title>Language Learner</title>
+	</head>
+	<body>
+		<div class="text-center">
+			<h1 class="text-2xl font-bold my-5">Language Learner</h1>
+			<div id="content-container">
+				<div class="flex justify-center gap-5 flex-col" id="authenticate-form">
+					<h2 class="text-xl font-bold my-5 underline">Authentication</h2>
+					<form
+						hx-post="/auth"
+						hx-swap="outerHTML"
+						hx-target="#authenticate-form"
+						class="flex flex-col gap-5 items-center my-5"
+					>
+						<input
+							class="input-field"
+							type="text"
+							name="username"
+							placeholder="Username"
+							required
+						/>
+						<input
+							class="input-field"
+							type="password"
+							name="password"
+							placeholder="Password"
+							required
+						/>
+						<button type="submit" class="button-style">Send</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

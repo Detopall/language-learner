@@ -1,0 +1,17 @@
+- (for fresh install) create database.db file in the database folder
+
+- writing
+	- hiragana/katakana/kanji AI model
+	- store the completed ones in the database (create a new table)
+- reading:
+	- insert some pdfs for the reading section and have a list to choose from for the user
+	- no need to store the completed ones
+- conversations:
+	- conversations will be with the Ollama API (local model)
+	- store the summary of the conversations in the database (create a new table)
+- quizzes:
+	- a "fill in the blank" quiz with Ollama API
+	- ask the AI to give a question with giving possible answers, show those to the user and let them choose the correct one
+	- don't keep track of the correct answers, this is just for fun
+- settings:
+	- able to change the model for each section, change password, change username, remove account, remove progress, dark mode
