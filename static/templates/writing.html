@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			src="https://unpkg.com/htmx.org@2.0.4"
+			integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<script defer src="/static/assets/writing-script.js"></script>
+		<title>Language Learner</title>
+		<style type="text/tailwindcss">
+			.button-style {
+				@apply px-5 py-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow;
+			}
+			.reset-button {
+				@apply mt-4 text-sm px-4 py-2 rounded-lg text-blue-600 bg-white border border-blue-500 hover:bg-blue-50 transition;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-50 text-gray-800 font-sans">
+		<div class="flex justify-center items-center min-h-screen p-6">
+			<div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
+				<h1 class="text-3xl font-bold text-center text-blue-700">
+					Writing Practice
+				</h1>
+
+				<form
+					id="prediction-form"
+					hx-post="/writing-prediction"
+					hx-target="#prediction-result"
+					class="space-y-4"
+				>
+					<div id="canvas-container" class="w-full" hx-swap-oob="true">
+						{% include "canvas_fragment.html" %}
+					</div>
+
+					<input type="hidden" name="canvas_data" id="canvas-data" />
+
+					<div class="flex justify-center">
+						<button
+							class="button-style"
+							type="submit"
+							onclick="prepareCanvasData()"
+						>
+							Make Prediction
+						</button>
+					</div>
+				</form>
+
+				<div id="prediction-result" hx-swap-oob="true" class="text-center">
+					{% if message %}
+					<p class="text-green-600 font-semibold text-lg">{{ message }}</p>
+					{% endif %} {% if error %}
+					<p class="text-red-600 font-semibold text-lg">{{ error }}</p>
+					{% endif %}
+				</div>
+
+				<div class="flex justify-center">
+					<button
+						class="reset-button"
+						hx-get="/writing-reset"
+						hx-target="#canvas-container"
+						hx-swap="innerHTML"
+						onclick="document.getElementById('prediction-result').innerHTML = ''"
+					>
+						Reset
+					</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

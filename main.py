@@ -1,16 +1,23 @@
 import sqlite3
 import secrets
 import datetime
+import base64
+import subprocess
+from io import BytesIO
+
 import uvicorn
 from pathlib import Path
 from fastapi import FastAPI, Form, Depends, Response, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi.templating import Jinja2Templates
+from PIL import Image
 
 from database.db_user_crud import get_user, add_user, verify_user_password
 from database.db_session_crud import add_session_token, get_session_token_from_user
 from database.db import create_tables, get_db
+from handwriting.handwriting_predict import predict_image
 
 STATIC_FOLDER = "static"
 TEMPLATES_FOLDER = f"{STATIC_FOLDER}/templates"
@@ -22,11 +29,43 @@ init_db = sqlite3.connect("database/database.db")
 create_tables(init_db)
 init_db.close()
 
+# Add session middleware
+app.add_middleware(SessionMiddleware, secret_key="secret")
+
 # Mount static files
 app.mount(f"/{STATIC_FOLDER}", StaticFiles(directory=STATIC_FOLDER), name=STATIC_FOLDER)
 
 # Initialize Jinja2 templates
 templates = Jinja2Templates(directory=TEMPLATES_FOLDER)
+import subprocess
+import secrets
+
+def translate_once(text):
+	"""Run trans for a single auto-detected translation and return stripped output."""
+	result = subprocess.run(
+		["trans", "-b", text],
+		capture_output=True,
+		text=True,
+	)
+	return result.stdout.strip()
+
+def auto_translate_until_stable(text, max_iterations=3):
+	"""Repeatedly translate until the output stabilizes or max_iterations reached."""
+	current = text
+	for _ in range(max_iterations):
+		result = translate_once(current)
+		if result == current:
+			return result
+		current = result
+	return current
+
+def new_character(request):
+	character = secrets.choice(open("handwriting/labels_fixed.txt", encoding="utf-8").readlines()).strip()
+	explanation = auto_translate_until_stable(character)
+
+	print(f"Character: {character} | Explanation: {explanation}")
+	request.session["original_char"] = character
+	return character, explanation, request
 
 
 @app.get("/")
@@ -38,6 +77,46 @@ async def root():
 async def dashboard(request: Request):
 	return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@app.get("/writing", response_class=HTMLResponse)
+async def writing(request: Request):
+	character, explanation, request = new_character(request)
+	return templates.TemplateResponse("writing.html", {"request": request, "character": character, "explanation": explanation})
+
+@app.get("/writing-reset", response_class=HTMLResponse)
+async def writing_reset(request: Request):
+	character, explanation, request = new_character(request)
+	return templates.TemplateResponse("canvas_fragment.html", {"request": request, "character": character, "explanation": explanation})
+
+
+@app.post("/writing-prediction", response_class=HTMLResponse)
+async def writing_prediction(request: Request):
+	form = await request.form()
+	canvas_data = form.get("canvas_data")
+
+	if not canvas_data:
+		return HTMLResponse(content="No canvas data received", status_code=400)
+
+	img = Image.open(BytesIO(base64.b64decode(canvas_data)))
+	img_path = "handwriting/drawing.png"
+	img.save(img_path)
+
+	predicted_char = predict_image(img_path)
+	original_char = request.session.get("original_char")
+
+	print(predicted_char == original_char)
+
+	if predicted_char != original_char:
+		return templates.TemplateResponse("prediction_result.html", {
+			"request": request,
+			"prediction": predicted_char,
+			"error": f"Try drawing again, the prediction didn't match the original character: {original_char}."
+		})
+	else:
+		return templates.TemplateResponse("prediction_result.html", {
+			"request": request,
+			"prediction": predicted_char,
+			"message": "Correct! The prediction matched the original character."
+		})
 
 @app.post("/auth", response_class=HTMLResponse)
 async def auth(

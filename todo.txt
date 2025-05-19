@@ -1,8 +1,5 @@
 - (for fresh install) create database.db file in the database folder
 
-- writing
-	- hiragana/katakana/kanji AI model
-	- store the completed ones in the database (create a new table)
 - reading:
 	- insert some pdfs for the reading section and have a list to choose from for the user
 	- no need to store the completed ones
