@@ -7,9 +7,10 @@ from io import BytesIO
 
 import uvicorn
 from pathlib import Path
-from fastapi import FastAPI, Form, Depends, Response, Request
+from fastapi import FastAPI, Form, Depends, Response, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.templating import Jinja2Templates
 from PIL import Image
@@ -37,8 +38,23 @@ app.mount(f"/{STATIC_FOLDER}", StaticFiles(directory=STATIC_FOLDER), name=STATIC
 
 # Initialize Jinja2 templates
 templates = Jinja2Templates(directory=TEMPLATES_FOLDER)
-import subprocess
-import secrets
+
+async def get_authenticated_user(request: Request, db: sqlite3.Connection = Depends(get_db)):
+	session_token = request.cookies.get("sessionToken")
+	print(session_token)
+
+	if not session_token:
+		raise HTTPException(status_code=403, detail="Missing session token")
+
+	cur = db.cursor()
+	cur.execute("SELECT * FROM sessions WHERE token = ?", (session_token,))
+	session = cur.fetchone()
+
+	if not session:
+		raise HTTPException(status_code=401, detail="Invalid session token")
+
+	return session[1]
+
 
 def translate_once(text):
 	"""Run trans for a single auto-detected translation and return stripped output."""
@@ -74,22 +90,22 @@ async def root():
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request):
+async def dashboard(request: Request, user_id: int = Depends(get_authenticated_user)):
 	return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @app.get("/writing", response_class=HTMLResponse)
-async def writing(request: Request):
+async def writing(request: Request, user_id: int = Depends(get_authenticated_user)):
 	character, explanation, request = new_character(request)
 	return templates.TemplateResponse("writing.html", {"request": request, "character": character, "explanation": explanation})
 
 @app.get("/writing-reset", response_class=HTMLResponse)
-async def writing_reset(request: Request):
+async def writing_reset(request: Request, user_id: int = Depends(get_authenticated_user)):
 	character, explanation, request = new_character(request)
 	return templates.TemplateResponse("canvas_fragment.html", {"request": request, "character": character, "explanation": explanation})
 
 
 @app.post("/writing-prediction", response_class=HTMLResponse)
-async def writing_prediction(request: Request):
+async def writing_prediction(request: Request, user_id: int = Depends(get_authenticated_user)):
 	form = await request.form()
 	canvas_data = form.get("canvas_data")
 
