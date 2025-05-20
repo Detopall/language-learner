@@ -28,25 +28,6 @@ function initCanvas() {
 		return { x: event.offsetX, y: event.offsetY };
 	}
 
-	function handleMouseDown(event) {
-		isDrawing = true;
-		const { x, y } = getOffset(event);
-		ctx.beginPath();
-		ctx.moveTo(x, y);
-	}
-
-	function handleMouseMove(event) {
-		if (!isDrawing) return;
-		const { x, y } = getOffset(event);
-		ctx.lineTo(x, y);
-		ctx.stroke();
-	}
-
-	function handleMouseUp() {
-		isDrawing = false;
-		ctx.closePath();
-	}
-
 	// Remove previous listeners if any (optional safety)
 	canvas.replaceWith(canvas.cloneNode(true));
 	const freshCanvas = document.getElementById("canvas");

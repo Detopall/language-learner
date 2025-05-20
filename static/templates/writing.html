@@ -13,23 +13,32 @@
 		<title>Language Learner</title>
 		<style type="text/tailwindcss">
 			.button-style {
-				@apply px-5 py-2 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow;
+				@apply px-5 py-2 rounded-xl font-semibold text-white bg-gray-600 hover:bg-gray-700 transition-colors duration-200 shadow;
 			}
 			.reset-button {
-				@apply mt-4 text-sm px-4 py-2 rounded-lg text-blue-600 bg-white border border-blue-500 hover:bg-blue-50 transition;
+				@apply mt-4 text-sm px-4 py-2 rounded-lg text-gray-600 bg-white border border-gray-500 hover:bg-gray-50 transition;
+			}
+			.menu-list {
+				@apply flex justify-center gap-5 mt-5;
+			}
+			.menu-link {
+				@apply px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200;
 			}
 		</style>
 	</head>
 	<body class="bg-gray-50 text-gray-800 font-sans">
-		<div class="flex justify-center items-center min-h-screen p-6">
+		<div
+			class="flex justify-center flex-col gap-5 items-center min-h-screen p-6"
+		>
+			{% include "dashboard.html" %}
 			<div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
-				<h1 class="text-3xl font-bold text-center text-blue-700">
+				<h2 class="text-3xl font-bold text-center text-gray-700">
 					Writing Practice
-				</h1>
+				</h2>
 
 				<form
 					id="prediction-form"
-					hx-post="/writing-prediction"
+					hx-post="/api/writing/prediction"
 					hx-target="#prediction-result"
 					class="space-y-4"
 				>
@@ -61,7 +70,7 @@
 				<div class="flex justify-center">
 					<button
 						class="reset-button"
-						hx-get="/writing-reset"
+						hx-get="/api/writing/reset"
 						hx-target="#canvas-container"
 						hx-swap="innerHTML"
 						onclick="document.getElementById('prediction-result').innerHTML = ''"
@@ -69,6 +78,18 @@
 						Reset
 					</button>
 				</div>
+			</div>
+			<div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
+				<p>
+					Character recognition powered by machine learning from
+					<a
+						href="https://github.com/CaptainDario/DaKanji-Single-Kanji-Recognition/tree/master"
+						target="_blank"
+						class="text-blue-600"
+						>CaptainDario</a
+					>
+					(DaAppLab)
+				</p>
 			</div>
 		</div>
 	</body>
