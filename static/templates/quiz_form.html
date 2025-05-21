@@ -28,12 +28,20 @@
 		</div>
 	</form>
 
+	<div
+		id="translating-questions-spinner"
+		class="htmx-indicator flex items-center justify-center"
+	>
+		<div class="spinner text-gray-600"></div>
+		<span class="ml-2 text-gray-600">Translating...</span>
+	</div>
 	<div class="flex justify-center mt-4">
 		<button
 			class="button-style bg-blue-600 hover:bg-blue-700"
 			hx-post="/quizzes/translate"
 			hx-target="#translation-container"
 			hx-swap="outerHTML"
+			hx-indicator="#translating-questions-spinner"
 			type="button"
 		>
 			Translate Question & Answers
