@@ -7,6 +7,7 @@ The Japanese Learner Web App is a comprehensive platform for anyone looking to l
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
+  - [Docker](#docker)
 - [Project Structure](#project-structure)
 - [Free Japanese Learning Resources](#free-japanese-learning-resources)
 
@@ -29,6 +30,24 @@ The Japanese Learner Web App is a comprehensive platform for anyone looking to l
 2. Add an empty `database.db` file in the `/database` directory
 3. Run the application: `uvicorn main:app --host 0.0.0.0 --port 8000`
 4. Open a web browser and navigate to `http://localhost:8000`
+
+### Ollama
+
+Make sure you have Ollama installed and running. You can follow the [Ollama installation guide](https://ollama.com/docs/installation) to set it up. Once Ollama is running, you can use the `ollama pull llama3:latest` command to pull the latest version of the model. Then, you can use the `ollama serve` command to start the server.
+
+### Docker
+
+You can also just use the `./run.sh` file to start, stop, remove ... the Docker containers and volumes
+
+```plaintext
+Usage:
+  ./run.sh start        Start the container
+  ./run.sh stop         Stop the container
+  ./run.sh rm           Remove the container
+  ./run.sh rm-all       Remove all containers and volumes
+  ./run.sh logs         Show logs for the container
+  ./run.sh help         Show this help message
+```
 
 ## Project Structure
 
