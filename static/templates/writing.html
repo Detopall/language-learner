@@ -38,7 +38,7 @@
 
 				<form
 					id="prediction-form"
-					hx-post="/api/writing/prediction"
+					hx-post="/writing/prediction"
 					hx-target="#prediction-result"
 					class="space-y-4"
 				>
@@ -70,7 +70,7 @@
 				<div class="flex justify-center">
 					<button
 						class="reset-button"
-						hx-get="/api/writing/reset"
+						hx-get="/writing/reset"
 						hx-target="#canvas-container"
 						hx-swap="innerHTML"
 						onclick="document.getElementById('prediction-result').innerHTML = ''"

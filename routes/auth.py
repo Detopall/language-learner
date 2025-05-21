@@ -14,6 +14,8 @@ from database.db_session_crud import get_session_token_from_user, add_session_to
 
 router = APIRouter()
 
+templates = get_templates()
+
 async def get_authenticated_user(request: Request, db: sqlite3.Connection = Depends(get_db)):
 	"""
 	Get the authenticated user
@@ -62,8 +64,6 @@ async def auth(
 	user = get_user(db, username)
 	if not user:
 		user = add_user(db, username, password)
-
-	templates = get_templates()
 
 	if not verify_user_password(password, user[2]):
 		print(verify_user_password(password, user[2]))

@@ -1,0 +1,72 @@
+<div id="quiz-container">
+	<h2 class="text-3xl font-bold text-center text-gray-700 mb-5">
+		{{ question }}
+	</h2>
+	<form
+		hx-post="/quizzes/answer"
+		hx-swap="outerHTML"
+		hx-target="#quiz-container"
+		class="space-y-4"
+	>
+		{% for choice in choices %}
+		<div class="flex justify-center gap-5">
+			<input
+				type="radio"
+				name="answer"
+				id="{{ choice }}"
+				value="{{ choice }}"
+				class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+				required
+			/>
+			<label for="{{ choice }}" class="text-lg font-sans text-gray-600">
+				{{ choice }}
+			</label>
+		</div>
+		{% endfor %}
+		<div class="flex justify-center">
+			<button class="button-style" type="submit">Submit</button>
+		</div>
+	</form>
+
+	<!-- Translate Button -->
+	<div class="flex justify-center mt-4">
+		<button
+			class="button-style bg-blue-600 hover:bg-blue-700"
+			hx-post="/quizzes/translate"
+			hx-target="#translation-container"
+			hx-swap="outerHTML"
+			type="button"
+		>
+			Translate Question & Answers
+		</button>
+	</div>
+
+	<div id="translation-container" class="mt-6">
+		{% if translation %}
+		<div class="w-full bg-blue-50 rounded-xl shadow p-6 space-y-4">
+			<h3 class="text-xl font-semibold text-blue-700 text-center mb-2">
+				Translation
+			</h3>
+			<p class="text-lg text-blue-700 text-center mb-2">
+				{{ translation.question }}
+			</p>
+			<ul class="space-y-2">
+				{% for t_choice in translation.choices %}
+				<li class="text-blue-700 text-center">{{ t_choice }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	</div>
+
+	{% if feedback %}
+	<div class="flex justify-center flex-col mt-5 gap-5">
+		<div class="flex justify-center">
+			<p class="text-lg font-sans text-{{ color }}-600">{{ feedback }}</p>
+		</div>
+		<div class="flex justify-center">
+			<a href="/quizzes" class="reset-button">Reset</a>
+		</div>
+	</div>
+	{% endif %}
+</div>

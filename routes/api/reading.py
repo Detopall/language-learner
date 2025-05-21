@@ -15,6 +15,7 @@ from routes.api.writing import auto_translate_until_stable
 
 router = APIRouter()
 
+templates = get_templates()
 
 def generate_japanese_story(length='short', difficulty='easy'):
 	"""
@@ -87,7 +88,6 @@ async def reading(request: Request, user_id: int = Depends(get_authenticated_use
 	Returns:
 		HTMLResponse: The response object
 	"""
-	templates = get_templates()
 	return templates.TemplateResponse("reading.html", {"request": request})
 
 @router.post("", response_class=HTMLResponse)
@@ -115,7 +115,6 @@ async def create_story(
 	request.session["story_difficulty"] = story_difficulty
 	request.session["story_length"] = story_length
 
-	templates = get_templates()
 	return templates.TemplateResponse(
 		"reading_story.html",
 		{
@@ -137,7 +136,6 @@ async def translate(request: Request, user_id: int = Depends(get_authenticated_u
 	story = request.session.get("story")
 	title_translation, story_translation = auto_translate_until_stable(title), auto_translate_until_stable(story)
 
-	templates = get_templates()
 	return templates.TemplateResponse(
 		"reading_story.html",
 		{

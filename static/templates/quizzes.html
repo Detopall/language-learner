@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			src="https://unpkg.com/htmx.org@2.0.4"
+			integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<title>Japanese Learner Web App</title>
+		<style type="text/tailwindcss">
+			.button-style {
+				@apply px-5 py-2 rounded-xl font-semibold text-white bg-gray-600 hover:bg-gray-700 transition-colors duration-200 shadow cursor-pointer;
+			}
+			.reset-button {
+				@apply mt-4 text-sm px-4 py-2 rounded-lg text-gray-600 bg-white border border-gray-500 hover:bg-gray-50 transition cursor-pointer;
+			}
+			.menu-list {
+				@apply flex justify-center gap-5 mt-5;
+			}
+			.menu-link {
+				@apply px-4 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-50 text-gray-800 font-sans">
+		<div
+			class="flex justify-center flex-col gap-5 items-center min-h-screen p-6"
+		>
+			{% include "dashboard.html" %}
+			<div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
+				<h2 class="text-3xl font-bold text-center text-gray-700">Quizzes</h2>
+			</div>
+
+			{% if question and choices %}
+			<div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 space-y-6">
+				<div id="quiz-container">{% include "quiz_form.html" %}</div>
+			</div>
+
+			{% else %}
+
+			<div class="w-full max-w-xl bg-white rounded-2xl space-y-6 flex flex-col justify-center items-center shadow-lg p-8">
+				<p class="text-lg font-bold text-center text-gray-700">
+					Generate a question
+				</p>
+
+				<button class="button-style" hx-post="/quizzes" hx-swap="outerHTML">
+					Generate
+				</button>
+			</div>
+
+			{% endif %}
+		</div>
+	</body>
+</html>

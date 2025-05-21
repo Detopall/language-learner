@@ -1,7 +1,4 @@
-<div
-	id="story-container"
-	class="w-full max-w-md p-8 space-y-6 m-auto"
->
+<div id="story-container" class="w-full max-w-md p-8 space-y-6 m-auto">
 	<div class="flex flex-col gap-2">
 		<span class="text-sm font-bold text-gray-600"
 			>Difficulty: {{ story_difficulty }}</span
@@ -15,7 +12,7 @@
 	<div class="flex justify-center">
 		<button
 			class="button-style"
-			hx-post="/api/reading/translate"
+			hx-post="/reading/translate"
 			hx-target="#story-container"
 		>
 			Translate
@@ -23,11 +20,13 @@
 	</div>
 
 	{% if story_translation %}
-	<div class="flex flex-col justify-center gap-5">
-		<h2 class="text-3xl font-bold text-center text-gray-700">
+	<div class="w-full bg-blue-50 rounded-xl shadow p-6 space-y-4 mt-6">
+		<h2 class="text-3xl font-bold text-blue-700 text-center mb-2">
 			{{ title_translation }}
 		</h2>
-		<p class="text-lg font-sans text-gray-600">{{ story_translation }}</p>
+		<p class="text-lg font-sans text-blue-700 text-center">
+			{{ story_translation }}
+		</p>
 	</div>
 	{% endif %}
 </div>

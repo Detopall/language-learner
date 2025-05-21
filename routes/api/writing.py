@@ -15,6 +15,8 @@ from handwriting.handwriting_predict import predict_image
 
 router = APIRouter()
 
+templates = get_templates()
+
 def translate_once(text: str):
 	"""
 	Translate text once using Google Translate.
@@ -74,7 +76,6 @@ async def writing(request: Request, user_id: int = Depends(get_authenticated_use
 		HTMLResponse: The response object
 	"""
 	character, explanation, request = new_character(request)
-	templates = get_templates()
 	return templates.TemplateResponse("writing.html", {"request": request, "character": character, "explanation": explanation})
 
 @router.get("/reset", response_class=HTMLResponse)
@@ -90,7 +91,6 @@ async def writing_reset(request: Request, user_id: int = Depends(get_authenticat
 		HTMLResponse: The response object
 	"""
 	character, explanation, request = new_character(request)
-	templates = get_templates()
 	return templates.TemplateResponse("canvas_fragment.html", {"request": request, "character": character, "explanation": explanation})
 
 
@@ -119,10 +119,6 @@ async def writing_prediction(request: Request, user_id: int = Depends(get_authen
 
 	predicted_char = predict_image(img_path)
 	original_char = request.session.get("original_char")
-
-	print(predicted_char == original_char)
-
-	templates = get_templates()
 
 	if predicted_char != original_char:
 		return templates.TemplateResponse("prediction_result.html", {
