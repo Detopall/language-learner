@@ -10,6 +10,7 @@ The Japanese Learner Web App is a comprehensive platform for anyone looking to l
   - [Docker](#docker)
 - [Project Structure](#project-structure)
 - [Free Japanese Learning Resources](#free-japanese-learning-resources)
+- [Demo](#demo)
 
 ## Features
 
@@ -60,3 +61,7 @@ Usage:
 ## Free Japanese Learning Resources
 
 The app provides a curated list of free Japanese learning resources, including language learning tools, textbooks, and online courses. These resources are designed to help learners of all levels improve their Japanese language skills.
+
+## Demo
+
+A demo video is available by pressing [this link](https://youtu.be/BiyRJrmX5kI)
