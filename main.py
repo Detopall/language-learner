@@ -38,7 +38,8 @@ async def root():
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request, user_id: int = Depends(get_authenticated_user)):
 	templates = get_templates()
-	return templates.TemplateResponse("dashboard.html", {"request": request})
+	request.session["home"] = True
+	return templates.TemplateResponse("dashboard.html", {"request": request, "home": True})
 
 
 # Include API routes
