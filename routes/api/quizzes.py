@@ -1,7 +1,5 @@
-import base64
 import requests
 import json
-
 
 from fastapi import FastAPI, Form, Depends, Response, Request, HTTPException, APIRouter
 from fastapi.responses import HTMLResponse
@@ -113,7 +111,9 @@ def auto_generate_quiz_until_stable(max_iterations=3):
 		else:
 			break
 
-	return question, choices
+	question_error = "Sorry, the question could not be generated. Please try again."
+	choices_error = ["Try again"]
+	return question or question_error, choices or choices_error
 
 @router.get("", response_class=HTMLResponse)
 async def quizzes(request: Request, user_id: int = Depends(get_authenticated_user)):
@@ -192,4 +192,4 @@ async def quizzes(request: Request, user_id: int = Depends(get_authenticated_use
 		"choices": choices_translation
 	}
 
-	return templates.TemplateResponse("quiz_form.html", {"request": request, "translation": translation})
+	return templates.TemplateResponse("quiz_translation.html", {"request": request, "translation": translation})

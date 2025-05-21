@@ -1,9 +1,5 @@
-import base64
 import json
-import subprocess
-import secrets
 import requests
-from io import BytesIO
 
 from fastapi import FastAPI, Form, Depends, Response, Request, HTTPException, APIRouter
 from fastapi.responses import HTMLResponse
@@ -70,7 +66,7 @@ def generate_japanese_story(length='short', difficulty='easy'):
 	response = requests.post(url, headers=headers, json=payload)
 	response.raise_for_status()
 	response = response.json()
-	print(response)
+
 	content = response["message"]["content"]
 	content_dict = json.loads(content)
 	return content_dict["title"], content_dict["story"]

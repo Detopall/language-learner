@@ -28,7 +28,6 @@
 		</div>
 	</form>
 
-	<!-- Translate Button -->
 	<div class="flex justify-center mt-4">
 		<button
 			class="button-style bg-blue-600 hover:bg-blue-700"
@@ -42,21 +41,7 @@
 	</div>
 
 	<div id="translation-container" class="mt-6">
-		{% if translation %}
-		<div class="w-full bg-blue-50 rounded-xl shadow p-6 space-y-4">
-			<h3 class="text-xl font-semibold text-blue-700 text-center mb-2">
-				Translation
-			</h3>
-			<p class="text-lg text-blue-700 text-center mb-2">
-				{{ translation.question }}
-			</p>
-			<ul class="space-y-2">
-				{% for t_choice in translation.choices %}
-				<li class="text-blue-700 text-center">{{ t_choice }}</li>
-				{% endfor %}
-			</ul>
-		</div>
-		{% endif %}
+		{% if translation %} {% include "quiz_translation.html" %} {% endif %}
 	</div>
 
 	{% if feedback %}

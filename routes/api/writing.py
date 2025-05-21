@@ -9,7 +9,6 @@ from fastapi.templating import Jinja2Templates
 from PIL import Image
 
 from config import get_templates
-from database.db import get_db
 from routes.auth import get_authenticated_user
 from handwriting.handwriting_predict import predict_image
 
