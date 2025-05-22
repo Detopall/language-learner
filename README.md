@@ -14,6 +14,7 @@ The Japanese Learner Web App is a comprehensive platform for anyone looking to l
 
 ## Features
 
+- Main page contains a lot of resources for Japanese Language learning
 - Handwriting practice for Japanese scripts (Hiragana, Katakana, Kanji)
 - Reading practice with AI-generated stories
 - Quizzes with AI-generated questions and answers
@@ -54,9 +55,12 @@ Usage:
 
 - `main.py`: The main application file, using FastAPI framework
 - `static/`: Directory for static files (images, CSS, JavaScript)
+  - `templates/`: Directory contains the html pages used
 - `routes/`: Directory for API routes (auth, quizzes, etc.)
 - `database/`: Directory for database schema and functions
 - `handwriting/`: Directory containing handwriting prediction model and related files
+  - Character recognition powered by machine learning from [CaptainDario](https://github.com/CaptainDario/DaKanji-Single-Kanji-Recognition/tree/master) (DaAppLab)
+
 
 ## Free Japanese Learning Resources
 
