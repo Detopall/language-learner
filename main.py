@@ -1,16 +1,14 @@
 import sqlite3
-from database.db import get_db
 from routes.auth import router as auth_router
 from routes.auth import get_authenticated_user
 from routes.api import router as api_router
 from config import get_templates
 
 import uvicorn
-from fastapi import FastAPI, Form, Depends, Response, Request, HTTPException
+from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi.templating import Jinja2Templates
 
 from database.db import create_tables
 
@@ -30,16 +28,19 @@ app.add_middleware(SessionMiddleware, secret_key="secret")
 # Mount static files
 app.mount(f"/{STATIC_FOLDER}", StaticFiles(directory=STATIC_FOLDER), name=STATIC_FOLDER)
 
+
 @app.get("/")
 async def root():
-	return FileResponse(f"{STATIC_FOLDER}/index.html")
+    return FileResponse(f"{STATIC_FOLDER}/index.html")
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request, user_id: int = Depends(get_authenticated_user)):
-	templates = get_templates()
-	request.session["home"] = True
-	return templates.TemplateResponse("dashboard.html", {"request": request, "home": True})
+async def dashboard(request: Request, _: int = Depends(get_authenticated_user)):
+    templates = get_templates()
+    request.session["home"] = True
+    return templates.TemplateResponse(
+        "dashboard.html", {"request": request, "home": True}
+    )
 
 
 # Include API routes
@@ -48,4 +49,4 @@ app.include_router(api_router)
 
 
 if __name__ == "__main__":
-	uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
